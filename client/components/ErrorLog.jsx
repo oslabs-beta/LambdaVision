@@ -8,8 +8,13 @@ const styles = {
    width: "100%",
    borderCollapse: "collapse",
    marginTop: "20px",
-   backgroundColor: "#fff",
    border: "1px solid #ddd",
+ },
+ h1: {
+   textAlign: "left",
+   fontSize: "23px",
+   padding: "10px",
+   color: "gray",
  },
  th: {
    color: "gray",
@@ -32,11 +37,12 @@ const styles = {
    textDecoration: "none",
  },
 };
-const ErrorTable = ({ errors }) => {
+const ErrorLog = ({ errors }) => {
  return (
    <div>
      <table style={styles.table}>
        <thead>
+         <h1 style={styles.h1}>Error Log</h1>
          <tr>
            <th style={styles.th}>Timestamp</th>
            <th style={styles.th}>Error Type</th>
@@ -68,5 +74,7 @@ const ErrorTable = ({ errors }) => {
  );
 };
 
+
+export default ErrorLog;
 
 export default ErrorTable;
