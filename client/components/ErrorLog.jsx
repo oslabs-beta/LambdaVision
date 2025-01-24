@@ -77,4 +77,4 @@ const ErrorLog = ({ errors }) => {
 
 export default ErrorLog;
 
-export default ErrorTable;
+
