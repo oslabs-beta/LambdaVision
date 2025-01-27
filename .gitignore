@@ -7,5 +7,5 @@ node_modules/
 #output from webpack
 dist/
 
-//  Sensitive Environment Variables
-.env/
+#Sensitive Environment Variables
+.env
