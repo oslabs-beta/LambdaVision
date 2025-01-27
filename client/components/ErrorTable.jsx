@@ -1,6 +1,6 @@
 import React from "react";
 
-const ErrorTable = ({ errors }) => {
+const ErrorTable = ({ errors = [] }) => {
   return (
     <div className="overflow-x-auto bg-white shadow-md rounded-lg">
       <table className="min-w-full border-collapse table-auto">

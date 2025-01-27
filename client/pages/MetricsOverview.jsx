@@ -1,20 +1,16 @@
 
 import React from "react";
-import Header from "./Header";
-import Chart from "./Chart";
-import Sidebar from "./Sidebar";
-import MetricCard from "./MetricCard";
-import ErrorTable from "./ErrorTable";
+import Chart from "../components/Chart";
+import MetricCard from "../components/MetricCard";
+import ErrorTable from "../components/ErrorTable";
 
 const MetricsOverview = () => {
   return (
     <div className="App flex">
-      <Sidebar />
       <div className="flex-1">
-        <Header />
         <div className="p-6 space-y-6">
           {/* Metrics Summary Section */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className= "flex flex-wrap gap-4">    {/*"grid grid-cols-1 md:grid-cols-4 gap-6"*/}
             <MetricCard title="Total Functions" metric="24" />
             <MetricCard title="Total Invocations" metric="1.2M" />
             <MetricCard title="Avg. Execution Time" metric="245ms" />
