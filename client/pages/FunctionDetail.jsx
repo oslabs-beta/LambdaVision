@@ -1,7 +1,8 @@
 import React from "react";
-import MetricCard from "./MetricCard";
-import Chart from "./Chart";
-import ErrorLog from "./ErrorLog";
+import MetricCard from '../components/MetricCard';
+import Chart from "../components/Chart";
+import ErrorLog from "../components/ErrorLog"
+
 
 const styles = {
  MetricContainer: {
@@ -61,7 +62,8 @@ const errorData = [
 const FunctionPage = () => {
  return (
    <div>
-     <div className="MetricContainer" style={styles.MetricContainer}>
+       <h1 className="text-2xl font-bold text-gray-800">Function Detail</h1>
+     <div className="flex flex-wrap gap-4">
        <MetricCard
          title="Total Invocations"
          metric="24,521"
