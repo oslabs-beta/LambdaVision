@@ -1,45 +1,18 @@
-import React from "react";
-const styles = {
- metricCard: {
-   backgroundColor: "white",
-   borderRadius: "5px",
-   width: "20%",
-   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-   padding: "20px", 
- },
- title: {
-   color: "gray",
-   fontSize: "16px",
-   paddingTop: "15px",
-   paddingBottom: "0",
-   margin: "5px",
- },
- h1: {
-   fontSize: "30px",
-   padding: "0",
-   margin: "5px",
- },
- description: {
-   color: "gray",
-   fontSize: "15px",
-   paddingBottom: "15px",
-   marginBottom: "0px",
- },
-};
+import React from 'react';
 
-
-const MetricCard = ({title, metric, description}) => {
-    return(
-<div style={styles.metricCard}>
-    <p id="title" style={styles.title}>
+const MetricCard = ({ title, metric, description }) => {
+  return (
+    <div className='bg-white rounded-lg w-1/5 shadow-xl p-5'>
+      <p id='title' className='text-gray-500 text-base pt-4 pb-0 m-1'>
         {title}
-    </p>
-    <h1 style={styles.h1}>
-        {metric}
-    </h1>
-    <p id="description" style={styles.description}> {description}</p>
-</div>
-    );
-}
+      </p>
+      <h1 className='text-3xl p-0 m-1'>{metric}</h1>
+      <p id='description' className='text-gray-500 text-sm pb-4 m-0'>
+        {' '}
+        {description}
+      </p>
+    </div>
+  );
+};
 
 export default MetricCard;
