@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
 
-const Chart = ({ title, data, color = "steelblue" }) => {
+const Chart = ({ title, data, color }) => {
   const svgRef = useRef();
 
   useEffect(() => {
     // Clear the container before rendering
-    d3.select(svgRef.current).selectAll("*").remove();
+    d3.select(svgRef.current).selectAll('*').remove();
 
     // Margins and chart dimensions
     const margin = { top: 10, right: 30, bottom: 30, left: 60 };
@@ -17,18 +17,18 @@ const Chart = ({ title, data, color = "steelblue" }) => {
 
     // Parse the date and value from the data
     const parseData = data.map((d) => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse('%Y-%m-%d')(d.date),
       value: +d.value,
     }));
 
     // Create the SVG container
     const svg = d3
       .select(svgRef.current)
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X axis: time scale
     const x = d3
@@ -39,9 +39,9 @@ const Chart = ({ title, data, color = "steelblue" }) => {
     const xAxis = d3
       .axisBottom(x)
       .ticks(d3.timeMonth.every(1))
-      .tickFormat(d3.timeFormat("%b %d"));
+      .tickFormat(d3.timeFormat('%b %d'));
 
-    svg.append("g").attr("transform", `translate(0, ${height})`).call(xAxis);
+    svg.append('g').attr('transform', `translate(0, ${height})`).call(xAxis);
 
     // Y axis: linear scale
     const y = d3
@@ -49,27 +49,38 @@ const Chart = ({ title, data, color = "steelblue" }) => {
       .domain([0, d3.max(parseData, (d) => d.value)])
       .range([height, 0]);
 
-    svg.append("g").call(d3.axisLeft(y));
+    svg.append('g').call(d3.axisLeft(y));
+
+    const line = d3
+      .line()
+      .x((d) => x(d.date))
+      .y((d) => y(d.value));
 
     // Add the line
+
     svg
-      .append("path")
+      .append('path')
       .datum(parseData)
-      .attr("fill", "none")
-      .attr("stroke", color)
-      .attr("stroke-width", 1.5)
-      .attr(
-        "d",
-        d3
-          .line()
-          .x((d) => x(d.date))
-          .y((d) => y(d.value))
-      );
+      .attr('fill', 'none')
+      .attr('stroke', color)
+      .attr('stroke-width', 1.5)
+      .attr('d', line)
+      .attr('stroke-dasharray', function () {
+        const length = this.getTotalLength();
+        return `${length} ${length}`;
+      })
+      .attr('stroke-dashoffset', function () {
+        return this.getTotalLength();
+      })
+      .transition() //transition 
+      .duration(2000) 
+      .ease(d3.easeCubicOut) 
+      .attr('stroke-dashoffset', 0);
   }, [data, color]);
 
   return (
-    <div>
-      <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
+    <div >
+      <h1 className='text-lg font-semibold text-gray-800'>{title}</h1>
       <svg ref={svgRef} width={460} height={400}></svg>
     </div>
   );
