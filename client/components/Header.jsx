@@ -1,22 +1,26 @@
-
-import React from 'react';
-//import './App.jsx';
-//import "font";
+import React from "react";
 
 function Header() {
   return (
-    <div className="Header">
-      <nav className="navbar">
-        <div className="navbar-left">
-          <span className="navbar-title">LambdaVision</span>
+    <div className="bg-gray-800 text-white shadow-md">
+      <nav className="flex justify-between items-center px-6 py-4">
+        {/* Left Section */}
+        <div className="text-lg font-bold">
+          LambdaVision
         </div>
-        <div className="navbar-right">
-          <span className="notification-icon">
-            <i className="bell"></i> {/* notification bell icon - 
-                                        import it in App.js and reference it in 
-                                        JSX using `bell` label */}
-            <span className="notification-badge">3</span> {/* Notification count */}
-          </span>
+
+        {/* Right Section */}
+        <div className="relative">
+          <button
+            className="relative focus:outline-none"
+            aria-label="Notifications"
+          >
+            <i className="fas fa-bell text-xl"></i> {/* Font Awesome icon */}
+            {/* Notification Badge */}
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
+              3
+            </span>
+          </button>
         </div>
       </nav>
     </div>
@@ -24,11 +28,3 @@ function Header() {
 }
 
 export default Header;
-
-/* Notes: 
-
- - Things to do: 
- 1.) need a flexbox in the css file for the nav bar (header)
- 2.) 
-
-*/
