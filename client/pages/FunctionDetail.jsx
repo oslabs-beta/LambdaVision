@@ -13,6 +13,18 @@ const data = [
   { date: '2023-06-01', value: 90 },
   { date: '2023-07-01', value: 55 },
 ];
+const data2 = [
+  { date: '2024-01-01', value: 128 },
+  { date: '2024-02-01', value: 256 },
+  { date: '2024-03-01', value: 512 },
+  { date: '2024-04-01', value: 1024 },
+  { date: '2024-05-01', value: 2048 },
+  { date: '2024-06-01', value: 3072 },
+  { date: '2024-07-01', value: 4096 },
+  { date: '2024-08-01', value: 5120 },
+  { date: '2024-09-01', value: 6144 },
+];
+
 const errorData = [
   {
     time: '2024-01-01 10:00',
@@ -49,8 +61,6 @@ const FunctionPage = () => {
       <h1 className='text-2xl font-bold text-gray-800'>Function Detail</h1>
 
       <div className='mt-4 pb-2'>
-
-       
         <select
           id='function-select'
           className='mt-2 p-2 pb-3 border border-gray-300 rounded-md w-1/2'
@@ -98,12 +108,12 @@ const FunctionPage = () => {
       <div className='flex gap-4 p-5'>
         <div
           s
-          className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md'
+          className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'
         >
           <Chart title='Execution Duration' data={data} color={'blue'} />
         </div>
-        <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md'>
-          <Chart title='Memory Usage' data={data} color={'green'} />
+        <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
+          <Chart title='Memory Usage' data={data2} color={'green'} />
         </div>
       </div>
       <div>
