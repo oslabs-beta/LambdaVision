@@ -32,7 +32,7 @@ async function fetchMetric(functionName, metricName, statistic) {
 }
 
 // Controller to fetch Lambda metrics
-exports.getLambdaMetrics = async (req, res) => {
+exports.getTotalMetrics = async (req, res) => {
     try {
       // Step 1: Fetch all Lambda functions
       const functionsData = await lambda.listFunctions().promise();

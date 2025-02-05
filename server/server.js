@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const metricsRoutes = require('./routes/metricRoutes')
+const awsRoutes = require('./routes/awsRoutes')
 
 
 const app = express();
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Middleware for routes 
-app.use("/api", metricsRoutes);
+app.use("/api", awsRoutes);
 
 const PORT = 3000;
 
