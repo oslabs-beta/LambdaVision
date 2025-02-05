@@ -8,4 +8,4 @@ node_modules/
 dist/
 
 #Sensitive Environment Variables
-.env
+.env*

@@ -1,69 +1,64 @@
-import {
-  CloudWatchLogsClient,
-  DescribeLogGroupsCommand,
-} from "@aws-sdk/client-cloudwatch-logs";
+const AWS = require('aws-sdk');
+require('dotenv').config();
 
-const client = new CloudWatchLogsClient({ region: "us-east-1" });
+// Configure AWS
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
 
-const listLogGroups = async () => {
-  try {
-    const command = new DescribeLogGroupsCommand({});
-    const response = await client.send(command);
-    console.log("Log Groups:", response.logGroups);
-  } catch (err) {
-    console.error("Error listing log groups:", err);
-  }
+const lambda = new AWS.Lambda();
+const cloudwatchlogs = new AWS.CloudWatchLogs();
+
+exports.getAllLambdaErrorLogs = async (req, res) => {
+    try {
+        // Step 1: Fetch all Lambda functions
+        const functionsResponse = await lambda.listFunctions().promise();
+        const functionNames = functionsResponse.Functions.map(fn => fn.FunctionName);
+
+        // Step 2: Fetch logs for each function
+        let allErrorLogs = [];
+
+        for (const functionName of functionNames) {
+            const logGroupName = `/aws/lambda/${functionName}`;
+
+            try {
+                // Get the most recent log streams
+                const logStreams = await cloudwatchlogs.describeLogStreams({
+                    logGroupName,
+                    orderBy: "LastEventTime",
+                    descending: true,
+                    limit: 2
+                }).promise();
+
+                if (!logStreams.logStreams.length) continue;
+
+                // Fetch logs from the most recent stream
+                const latestStreamName = logStreams.logStreams[0].logStreamName;
+                const logEvents = await cloudwatchlogs.getLogEvents({
+                    logGroupName,
+                    logStreamName: latestStreamName,
+                    limit: 10
+                }).promise();
+
+                // Filter error messages
+                const errorLogs = logEvents.events
+                    .filter(event => event.message.includes("ERROR") || event.message.includes("Exception"))
+                    .map(event => event.message);
+
+                if (errorLogs.length > 0) {
+                    allErrorLogs.push({ functionName, errorLogs });
+                }
+            } catch (logError) {
+                console.warn(`No logs found for function: ${functionName}`);
+            }
+        }
+
+        return res.json({ errorLogs: allErrorLogs });
+
+    } catch (error) {
+        console.error("Error fetching logs:", error);
+        return res.status(500).json({ error: "Failed to fetch Lambda error logs" });
+    }
 };
-
-listLogGroups();
-
-import { DescribeLogStreamsCommand } from "@aws-sdk/client-cloudwatch-logs";
-
-const listLogStreams = async (logGroupName) => {
-  try {
-    const command = new DescribeLogStreamsCommand({
-      logGroupName: logGroupName,
-    });
-    const response = await client.send(command);
-    console.log("Log Streams:", response.logStreams);
-  } catch (err) {
-    console.error("Error listing log streams:", err);
-  }
-};
-
-listLogStreams("/aws/lambda/my-lambda-function");
-
-import { GetLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
-
-const getLogEvents = async (logGroupName, logStreamName) => {
-  try {
-    const command = new GetLogEventsCommand({
-      logGroupName: logGroupName,
-      logStreamName: logStreamName,
-      limit: 50, // Number of events to fetch
-    });
-    const response = await client.send(command);
-    response.events.forEach((event) => console.log(event.message));
-  } catch (err) {
-    console.error("Error fetching log events:", err);
-  }
-};
-
-getLogEvents("/aws/lambda/my-lambda-function", "2025/01/23/[$LATEST]abcd1234");
-
-import { FilterLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
-
-const filterLogEvents = async (logGroupName, filterPattern) => {
-  try {
-    const command = new FilterLogEventsCommand({
-      logGroupName: logGroupName,
-      filterPattern: filterPattern, // Example: 'ERROR'
-    });
-    const response = await client.send(command);
-    response.events.forEach((event) => console.log(event.message));
-  } catch (err) {
-    console.error("Error filtering log events:", err);
-  }
-};
-
-filterLogEvents("/aws/lambda/my-lambda-function", "ERROR");
