@@ -16,6 +16,9 @@ const Sidebar = () => {
         <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
           <Link to='/errors'>Active Errors</Link>
         </li>
+        <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
+          <Link to='/settings'>Settings</Link>
+        </li>
       </ul>
     </aside>
   );
