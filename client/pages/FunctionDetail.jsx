@@ -1,60 +1,85 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MetricCard from '../components/MetricCard';
 import Chart from '../components/Chart';
 import ErrorLog from '../components/ErrorLog';
+import axios from 'axios';
 
-//sample data
-const data = [
-  { date: '2023-01-01', value: 30 },
-  { date: '2023-02-01', value: 80 },
-  { date: '2023-03-01', value: 45 },
-  { date: '2023-04-01', value: 60 },
-  { date: '2023-05-01', value: 20 },
-  { date: '2023-06-01', value: 90 },
-  { date: '2023-07-01', value: 55 },
-];
-const data2 = [
-  { date: '2024-01-01', value: 128 },
-  { date: '2024-02-01', value: 256 },
-  { date: '2024-03-01', value: 512 },
-  { date: '2024-04-01', value: 1024 },
-  { date: '2024-05-01', value: 2048 },
-  { date: '2024-06-01', value: 3072 },
-  { date: '2024-07-01', value: 4096 },
-  { date: '2024-08-01', value: 5120 },
-  { date: '2024-09-01', value: 6144 },
-];
-
-const errorData = [
-  {
-    time: '2024-01-01 10:00',
-    error: 'Timeout',
-    message: 'Function execution exceeded time limit',
-    duration: '85ms',
-    action: 'Details',
-  },
-  {
-    time: '2024-01-02 11:15',
-    error: 'Memory Limit Exceeded',
-    message: 'Function used more memory than allocated',
-    duration: '150ms',
-    action: 'Details',
-  },
-  {
-    time: '2024-01-03 14:00',
-    error: 'Invalid Input',
-    message: 'Received unexpected input parameters',
-    duration: '120ms',
-    action: 'Details',
-  },
-];
-  const functions = ['Function A', 'Function B', 'Function C', 'Function D'];
 const FunctionPage = () => {
-   const [selectedFunction, setSelectedFunction] = useState('');
+  const [functions, setFunctions] = useState([]);
+  const [selectedFunction, setSelectedFunction] = useState('');
+  const [metrics, setMetrics] = useState({
+    Invocations: 0,
+    Errors: 0,
+    Throttles: 0,
+    ColdStartDuration: 0,
+  });
+  // const [errorLogs, setErrorLogs] = useState([]);
 
-   const handleFunctionChange = (event) => {
-     setSelectedFunction(event.target.value);
-   };
+  //Function List
+  const fetchFunctions = async () => {
+    try {
+      const response = await axios.get(
+        'http://localhost:3000/api/lambda/total-functions'
+      );
+      console.log(response);
+      setFunctions(response.data.functions);
+    } catch (error) {
+      console.error('Error fetching functions', error.message);
+    }
+  };
+  //Metric Cards & Charts
+  const fetchFunctionMetrics = async (functionName) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/lambda/functions/${functionName}/metrics`
+      );
+      setMetrics(response.data);
+    } catch (error) {
+      console.error('Error getting metrics', error);
+    }
+  };
+  //Error Logs
+  // const fetchErrorLogs = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       ''
+  //     );
+  //     setErrorLogs(response.data.errorLogs);
+  //   } catch (error) {
+  //     console.error('Error getting metrics', error);
+  //   }
+  // };
+
+  useEffect(() => {
+    fetchFunctions();
+  }, []);
+
+  useEffect(() => {
+    if (selectedFunction) {
+      fetchFunctionMetrics(selectedFunction);
+    }
+  }, [selectedFunction]);
+
+  const handleFunctionChange = (event) => {
+    setSelectedFunction(event.target.value);
+  };
+
+  //create an array for throttles data
+  const invocationsData = [
+    {
+      time: new Date(),
+      value: metrics.Throttles,
+    },
+  ];
+
+  //create an array for invocations data
+
+  const durationData = [
+    {
+      time: new Date(),
+      value: metrics.ColdStartDuration,
+    },
+  ];
 
   return (
     <div>
@@ -69,8 +94,8 @@ const FunctionPage = () => {
         >
           <option value=''>-- Select a Function --</option>
           {functions.map((func, index) => (
-            <option key={index} value={func}>
-              {func}
+            <option key={index} value={func.name}>
+              {func.name}
             </option>
           ))}
         </select>
@@ -78,46 +103,53 @@ const FunctionPage = () => {
       <div className='flex flex-wrap gap-4'>
         <MetricCard
           title='Total Invocations'
-          metric='24,521'
-          description='+12.3% vs last period'
+          metric={metrics.Invocations}
+          // description='+12.3% vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
-          title='Success Rate'
-          metric='99.2%'
-          description='-0.1% vs last period'
+          title='Error Rate'
+          metric={`${metrics.Errors} %`}
+          // description='-0.1% vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
-          title='Avg. Duration'
-          metric='245ms'
-          description='+5ms vs last period'
+          title='Throttles'
+          metric={`${metrics.Throttles}`}
+          // description='+5ms vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
           title='Cold Starts'
-          metric='142'
-          description='-23% vs last period'
+          metric={metrics.ColdStartDuration}
+          // description='-23% vs last period'
         >
           {' '}
         </MetricCard>
       </div>
       <div className='flex gap-4 p-5'>
-        <div
-          s
-          className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'
-        >
-          <Chart title='Execution Duration' data={data} color={'blue'} />
+        <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
+          <Chart
+            title='Invocations'
+            data={invocationsData}
+            color={'blue'}
+            yLabel={'Milliseconds'}
+          />
         </div>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
-          <Chart title='Memory Usage' data={data2} color={'green'} />
+          <Chart
+            title='Duration'
+            data={durationData}
+            color={'green'}
+            yLabel={'Count'}
+          />
         </div>
       </div>
       <div>
-        <ErrorLog errors={errorData} />
+        <ErrorLog />
       </div>
     </div>
   );
