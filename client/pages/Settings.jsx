@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const SettingsPage = () => {
   const [accessKey, setAccessKey] = useState('');
   const [secretKey, setSecretsKey] = useState('');
   const [saved, setSaved] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    //send it to API
-    setSaved(true);
+    try {
+      await axios.post('http://localhost:3000/api/lambda/credentials', {
+        accessKey,
+        secretKey,
+      });
+      setSaved(true);
+    } catch (error) {
+      console.error('Error saving settings', error);
+    }
   };
   return (
     <div className='flex items-center justify-center h-screen bg-gray-100'>
