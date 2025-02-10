@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const Chart = ({ title, data, color }) => {
+const Chart = ({ title, data, color, yLabel }) => {
   const svgRef = useRef();
 
   useEffect(() => {
+    if (!data || data.length === 0) return; // Prevent rendering if data is empty
     // Clear the container before rendering
     d3.select(svgRef.current).selectAll('*').remove();
 
@@ -13,12 +14,10 @@ const Chart = ({ title, data, color }) => {
     const width = 460 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
-    if (!data || data.length === 0) return; // Prevent rendering if data is empty
-
     // Parse the date and value from the data
     const parseData = data.map((d) => ({
-      date: d3.timeParse('%Y-%m-%d')(d.date),
-      value: +d.value,
+      time: new Date(d.time),
+      value: +d.value || 0,
     }));
 
     // Create the SVG container
@@ -33,27 +32,43 @@ const Chart = ({ title, data, color }) => {
     // X axis: time scale
     const x = d3
       .scaleTime()
-      .domain(d3.extent(parseData, (d) => d.date))
+      .domain(d3.extent(parseData, (d) => d.time))
       .range([0, width]);
 
     const xAxis = d3
       .axisBottom(x)
-      .ticks(d3.timeMonth.every(1))
-      .tickFormat(d3.timeFormat('%b %d'));
+      .ticks(d3.timeMinute.every(5))
+      .tickFormat(d3.timeFormat('%H:%M'));
 
-    svg.append('g').attr('transform', `translate(0, ${height})`).call(xAxis);
+    svg
+      .append('g')
+      .attr('transform', `translate(0, ${height})`)
+      .call(xAxis)
+      .selectAll('text')
+      .style('text-anchor', 'middle') // Center align labels
+      .attr('transform', 'rotate(-30)') // Rotate for better readability
+      .style('font-size', '12px')
+      .style('fill', 'black'); // Ensure labels are visible
+  
 
+      
     // Y axis: linear scale
     const y = d3
       .scaleLinear()
       .domain([0, d3.max(parseData, (d) => d.value)])
       .range([height, 0]);
 
-    svg.append('g').call(d3.axisLeft(y));
+    svg
+      .append('g')
+      .call(
+        d3
+          .axisLeft(y)
+          .tickFormat((d) => (yLabel === 'Milliseconds' ? `${d} ms` : d))
+      );
 
     const line = d3
       .line()
-      .x((d) => x(d.date))
+      .x((d) => x(d.time))
       .y((d) => y(d.value));
 
     // Add the line
@@ -64,22 +79,34 @@ const Chart = ({ title, data, color }) => {
       .attr('fill', 'none')
       .attr('stroke', color)
       .attr('stroke-width', 1.5)
-      .attr('d', line)
-      .attr('stroke-dasharray', function () {
-        const length = this.getTotalLength();
-        return `${length} ${length}`;
-      })
-      .attr('stroke-dashoffset', function () {
-        return this.getTotalLength();
-      })
-      .transition() //transition 
-      .duration(2000) 
-      .ease(d3.easeCubicOut) 
-      .attr('stroke-dashoffset', 0);
-  }, [data, color]);
+      .attr('d', line);
+
+    // Add dots for each data point
+    svg
+      .selectAll('.dot')
+      .data(parseData)
+      .enter()
+      .append('circle')
+      .attr('cx', (d) => x(d.time)) // map time to x position
+      .attr('cy', (d) => y(d.value)) //map value to y position
+      .attr('r', 4) // Dot size
+      .attr('fill', color);
+
+    // Add Y-Axis Label
+    svg
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('x', -height / 2)
+      .attr('y', -60)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .style('font-size', '14px')
+      .style('fill', 'black')
+      .text(yLabel);
+  }, [data, color, yLabel]);
 
   return (
-    <div >
+    <div>
       <h1 className='text-lg font-semibold text-gray-800'>{title}</h1>
       <svg ref={svgRef} width={460} height={400}></svg>
     </div>
