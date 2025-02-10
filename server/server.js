@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const awsRoutes = require('./routes/awsRoutes')
-const authRoutes = require('./routes/authRoutes')
+const userAuth = require('./routes/authRoutes')
 const connectDB = require("./config/db")
 
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended: true}));
 
 // Middleware for routes 
 app.use("/api", awsRoutes);
-app.use("/api", authRoutes );
+app.use("/api", userAuth);
 
 const PORT = 3000;
 
