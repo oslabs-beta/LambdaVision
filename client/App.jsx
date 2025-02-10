@@ -1,37 +1,58 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
-import ErrorAlerts from "./pages/ErrorAlerts";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import MetricsOverview from "./pages/MetricsOverview";
+import ErrorAlerts from "./pages/ErrorAlerts";
 import FunctionDetail from "./pages/FunctionDetail";
 import SettingsPage from "./pages/Settings";
+import AuthenticatedLayout from "./components/AuthenticatedLayout";  // Import AuthenticatedLayout
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check if the user is authenticated when the app loads
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    if (storedAuth === "true") {
+      setIsAuthenticated(true); // Persist the authentication state
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem("isAuthenticated", "true");  // Store the authentication state
+  };
+
+  const handleSignup = () => {
+    console.log("User signed up!");
+    setIsAuthenticated(true);  // Automatically log in the user after signup
+    localStorage.setItem("isAuthenticated", "true");  // Store the authentication state
+  };
+
   return (
     <Router>
-      <div className='flex h-screen'>
-        {/* Sidebar (Always Visible) */}
-        <Sidebar />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="/signup" element={<Signup onSignup={handleSignup} />} />
 
-        {/* Main Content */}
-        <div className='flex flex-col flex-grow'>
-          {/* Header (Always Visible) */}
-          <Header />
-
-          {/* Page Content */}
-          <main className='p-6 bg-gray-100 flex-grow'>
-            <Routes>
-              <Route path='/' element={<MetricsOverview />} />
-              <Route path='/errors' element={<ErrorAlerts />} />
-              <Route path='/function-detail' element={<FunctionDetail />} />
-              <Route path='/settings' element={<SettingsPage />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
+        {/* Protected Routes (only show if authenticated) */}
+        {isAuthenticated ? (
+          <Route element={<AuthenticatedLayout />}>
+            <Route path="/metrics" element={<MetricsOverview />} />
+            <Route path="/errors" element={<ErrorAlerts />} />
+            <Route path="/function-detail" element={<FunctionDetail />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+        ) : (
+          // Redirect to login if not authenticated
+          <Route path="*" element={<Navigate to="/" />} />
+        )}
+      </Routes>
     </Router>
   );
 };
 
 export default App;
+
