@@ -69,7 +69,7 @@ Copy
 serverless deploy
 
 
-## How to Contribute  
+## Contribution Instructions 
 
 We welcome contributions to **LambdaVision**! If you'd like to contribute, please follow these guidelines:  
 
