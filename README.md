@@ -51,11 +51,6 @@ To get started with LambdaVision, follow the instructions below to set up the pr
    ```bash
    git clone https://github.com/yourusername/LambdaVision.git
    cd LambdaVision
-
-
-
-
-
 _______________
 
 Install dependencies:
