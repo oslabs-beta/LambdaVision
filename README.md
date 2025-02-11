@@ -5,11 +5,12 @@ LambdaVision is an open-source software project designed to provide clear, actio
 LambdaVision enables software engineers to gain deep visibility into Lambda function executions, making it easier to track invocation details, identify performance bottlenecks, and debug errors. By integrating with AWS CloudWatch, LambdaVision enhances the monitoring experience, offering actionable insights to optimize Lambda-based workloads and ensure smooth, efficient serverless applications.
 
 
-##Tech Stack 
+## Tech Stack 
 React, Node.js, Express.js, Tailwind, MongoDB, Webpack, d3.js, AWS, Jest
 
 
-##Table of Contents
+## Table of Contents
+
 Introduction
 Features
 Real-time monitoring
@@ -25,6 +26,7 @@ Clone the repository
 Install dependencies
 Configure AWS credentials
 Deploy Lambda functions (Optional)
+
 ## Features
 
 - **Real-time monitoring**: Track the performance of Lambda functions in real time, including invocation metrics, duration, and success rates.
