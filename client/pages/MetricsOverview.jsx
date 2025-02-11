@@ -9,7 +9,7 @@ import axios from 'axios'
     {/* MetricsOverview REACT Section */}
 const MetricsOverview = () => {
   const[metrics, setMetrics] = useState([
-    {Invocations: 0, Errors:0, throttles:'0ms', ColdStartDuration:0},
+    {totalFunctions: 0, totalInvocations:0, totalErrors:0, errorRate:0, averageDuration: 0},
   ]);
   
   {/* MetricsOverview FUNCTION Section */}
@@ -36,23 +36,28 @@ const MetricsOverview = () => {
           <div className= "flex flex-wrap gap-4">    {/*"grid grid-cols-1 md:grid-cols-4 gap-6"*/}
 
           <MetricCard
-          title='Total Invocations'
-          metric={metrics.Invocations}
+          title='Total Functions'
+          metric={metrics.totalFunctions}
         ></MetricCard>
 
           <MetricCard
+          title='Total Invocations'
+          metric={metrics.totalInvocations}
+        ></MetricCard>
+
+            <MetricCard
+          title='Total Errors'
+          metric={metrics.totalErrors}
+        ></MetricCard>
+
+            <MetricCard
           title='Error Rate'
-          metric={metrics.Errors}
+          metric={metrics.errorRate}
         ></MetricCard>
 
-            <MetricCard
-          title='Throttle Times'
-          metric={metrics.throttles}
-        ></MetricCard>
-
-            <MetricCard
-          title='Cold Start Times'
-          metric={metrics.ColdStartDuration}
+        <MetricCard
+          title='Average Duratiom'
+          metric={metrics.averageDuration}
         ></MetricCard>
 
         </div>
