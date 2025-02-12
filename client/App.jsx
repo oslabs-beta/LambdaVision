@@ -25,10 +25,10 @@ const App = () => {
   };
 
   const handleSignup = () => {
-    console.log("User signed up!");
     setIsAuthenticated(true);  // Automatically log in the user after signup
     localStorage.setItem("isAuthenticated", "true");  // Store the authentication state
   };
+
 
   return (
     <Router>
@@ -37,22 +37,22 @@ const App = () => {
         <Route path="/" element={<Login onLogin={handleLogin} />} />
         <Route path="/signup" element={<Signup onSignup={handleSignup} />} />
 
-        {/* Protected Routes (only show if authenticated) */}
-        {isAuthenticated ? (
-          <Route element={<AuthenticatedLayout />}>
-            <Route path="/metrics" element={<MetricsOverview />} />
-            <Route path="/errors" element={<ErrorAlerts />} />
-            <Route path="/function-detail" element={<FunctionDetail />} />
-            <Route path="/settings" element={<SettingsPage />} />
-          </Route>
-        ) : (
-          // Redirect to login if not authenticated
-          <Route path="*" element={<Navigate to="/" />} />
-        )}
+         {/* Protected Routes */}
+        <Route element={<AuthenticatedLayout />}>
+          <Route path="/metrics" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<MetricsOverview />} />} />
+          <Route path="/errors" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<ErrorAlerts />} />} />
+          <Route path="/function-detail" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<FunctionDetail />} />} />
+          <Route path="/settings" element={<ProtectedRoute isAuthenticated={isAuthenticated} element={<SettingsPage />} />} />
+        </Route>
+
+         {/* Catch-All Redirect */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
 };
-
+  const ProtectedRoute = ({ isAuthenticated, element }) => {
+  return isAuthenticated ? element : <Navigate to="/" />;
+};
 export default App;
 

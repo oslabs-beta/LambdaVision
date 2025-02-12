@@ -1,25 +1,35 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png'
 
 function Header() {
+   const navigate = useNavigate();
+
+    const handleSignOut = () => {
+    localStorage.removeItem('isAuthenticated');
+    // Redirect to the login page
+    navigate('/');
+    };
+
   return (
     <div className="bg-gray-800 text-white shadow-md">
       <nav className="flex justify-between items-center px-6 py-4">
-        {/* Left Section */}
-        <div className="text-lg font-bold">
-          LambdaVision
-        </div>
+       {/* Left Section */}
+      <div className="flex items-center space-x-2">
+        <img src={logo} alt="Logo" className="w-20 h-20 pb-0" />
+        <span className="text-lg font-bold">LambdaVision</span>
+      </div>
 
         {/* Right Section */}
         <div className="relative">
-          <button
-            className="relative focus:outline-none"
-            aria-label="Notifications"
+      
+
+            <button
+            className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
+            onClick={handleSignOut}
           >
-            <i className="fas fa-bell text-xl"></i> {/* Font Awesome icon */}
-            {/* Notification Badge */}
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
-              3
-            </span>
+            Sign Out
+          
           </button>
         </div>
       </nav>

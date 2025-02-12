@@ -1,71 +1,78 @@
 import React, { useState, useEffect } from "react";
 import ErrorTable from "../components/ErrorTable";
-//import Chart from "../components/Chart";
+import axios from "axios";
 
 const ErrorAlerts = () => {
   const [errors, setErrors] = useState([]);
-  const [errorBreakdown, setErrorBreakdown] = useState({
-    memoryErrors: 0,
-    timeoutErrors: 0,
-  });
+ 
+const fetchErrorLogs = async () => {
+try{
+ const response = await axios.get(
+        'http://localhost:3000/api/lambda/lambda/cloudlogs'
+      );
+      console.log(response);
+      const formattedErrors = response.data.errorLogs.flatMap((log) =>
+      log.errorLogs.map((message) => ({
+        functionName: log.functionName,
+        message,
+      }))
+    );
+      setErrors(formattedErrors);
+}catch(error){
+   console.error('Error fetching Logs', error.message);
+}
+};
 
-  useEffect(() => {
-    const mockErrors = [
-      {
-        type: "Memory Exceeded",
-        function: "Function A",
-        description: "Exceeded memory limit of 128MB",
-        timestamp: "2 min ago",
-        logsLink: "/logs/function-a",
-        traceLink: "/trace/function-a",
-      },
-      {
-        type: "Timeout Error",
-        function: "Function B",
-        description: "Execution timed out after 30 seconds",
-        timestamp: "15 min ago",
-        logsLink: "/logs/function-b",
-        traceLink: "/trace/function-b",
-      },
-    ];
-    setErrors(mockErrors);
+useEffect(() => {
+ fetchErrorLogs();
+}, []);
 
-    const mockBreakdown = { memoryErrors: 45, timeoutErrors: 30 };
-    setErrorBreakdown(mockBreakdown);
-  }, []);
+
 
   return (
-    <div className="flex h-screen">
-   
-      <div className="flex flex-col flex-grow">
-       
-        <main className="p-6 space-y-6">
-          <h1 className="text-2xl font-bold text-gray-800">Error Alerts</h1>
-          {/* Error Breakdown and Table */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 bg-white shadow rounded-lg">
-              <h2 className="text-lg font-semibold text-gray-700">Error Breakdown</h2>
-              <div className="mt-4 space-y-2">
-                <p className="text-gray-600">
-                  <span className="font-bold text-red-500">Memory Errors:</span>{" "}
-                  {errorBreakdown.memoryErrors}
-                </p>
-                <p className="text-gray-600">
-                  <span className="font-bold text-orange-500">Timeout Errors:</span>{" "}
-                  {errorBreakdown.timeoutErrors}
-                </p>
-              </div>
-            </div>
-            <div className="p-4 bg-white shadow rounded-lg">
-              {/* <Chart data={errorBreakdown} /> */}
-            </div>
-          </div>
-          <div className="p-4 bg-white shadow rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-700">Recent Errors</h2>
-            <ErrorTable errors={errors} />
-          </div>
-        </main>
+    <div className="overflow-x-auto">
+        <h1 className="text-2xl font-bold text-gray-800">Error Alerts</h1>
+      {/* <table className="min-w-full bg-white shadow rounded-lg">
+        <thead>
+          <tr className="bg-gray-200 text-gray-700">
+            <th className="py-2 px-4 text-left">Function Name</th>
+            <th className="py-2 px-4 text-left">Error Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          {errors.length > 0 ? (
+            errors.map((error, index) => (
+              <tr key={index} className="border-b">
+                <td className="py-2 px-4">{error.functionName}</td>
+                <td className="py-2 px-4 text-red-500">{error.message}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="2" className="py-4 px-4 text-center text-gray-500">
+                No errors found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table> */}
+      <div className="flex flex-wrap gap-4">
+  {errors.length > 0 ? (
+    errors.map((error, index) => (
+      <div key={index} className="flex flex-col bg-white shadow-lg rounded-lg p-4 w-64">
+        <div className="flex items-center mb-2">
+          <div className="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
+          <span className="text-gray-700 font-semibold">{error.functionName}</span>
+        </div>
+        <p className="text-red-500">{error.message}</p>
       </div>
+    ))
+  ) : (
+    <div className="text-center text-gray-500 w-full">
+      No errors found.
+    </div>
+  )}
+</div>
     </div>
   );
 };

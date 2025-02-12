@@ -6,19 +6,13 @@ const Signup = ({ onSignup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    // Check if passwords match
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-
+    
     try {
       const response = await axios.post(
         'http://localhost:3000/api/signup',
@@ -27,19 +21,19 @@ const Signup = ({ onSignup }) => {
           password,
           username,
         },
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-      if (response.status === 200) {
+          console.log("Signup response:", response.data);
+      if (response.status === 201) {
         // Call the onSignup function
-       if (onSignup) {
+       
          onSignup();
-       }
+   
         // Redirect to the Metrics Overview page after successful signup
-        navigate('/metrics');
+        navigate('/settings');
       }
   }catch(error) {
+    console.error("Signup error:", error.response?.data || error.message);
     setError('Error during signup. Please try again.');
     }
   };
@@ -85,18 +79,7 @@ const Signup = ({ onSignup }) => {
               required
             />
           </div>
-          <div className='mb-6'>
-            <label className='block text-sm font-medium text-gray-700'>
-              Confirm Password:
-            </label>
-            <input
-              type='password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className='mt-1 block w-full p-2 border border-gray-300 rounded-md'
-              required
-            />
-          </div>
+         
           <button
             type='submit'
             className='w-full bg-gray-800 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400'
