@@ -6,8 +6,9 @@
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server/server.js",
-    "client": "webpack serve --config webpack.config.js --mode development", 
-    "dev": "webpack serve --config webpack.config.js"
+    "client": "webpack serve --config webpack.config.js --mode development",
+    "dev": "webpack serve --config webpack.config.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
     "eslint": "^9.18.0",
     "eslint-config-react": "^1.1.7",
     "html-webpack-plugin": "^5.6.3",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "postcss-loader": "^8.1.1",
     "prettier": "^3.4.2",
