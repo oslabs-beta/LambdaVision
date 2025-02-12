@@ -1,25 +1,55 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {
+  ChartBarIcon,
+  CodeBracketIcon,
+  ExclamationTriangleIcon,
+  Cog8ToothIcon,
+} from '@heroicons/react/24/solid';
 
 const Sidebar = () => {
   return (
     <aside className='bg-gray-800 text-white h-screen w-64 p-6'>
-      <ul className='space-y-4'>
-        {/* Update the 'Overview' link to '/metrics' */}
-        <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
-          <Link to='/metrics'>Overview</Link>
+      <ul className='space-y-4 flex-1'>
+        <li>
+          <Link
+            to='/metrics'
+            className='flex items-center space-x-3 text-lg font-semibold hover:text-blue-400'
+          >
+            <ChartBarIcon className='w-6 h-6 text-white' />
+            <span>Overview</span>
+          </Link>
         </li>
 
-        <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
-          <Link to='/function-detail'>Functions</Link>
+        <li>
+          <Link
+            to='/function-detail'
+            className='flex items-center space-x-3 text-lg font-semibold hover:text-blue-400'
+          >
+            <CodeBracketIcon className='w-6 h-6 text-white' />
+            <span>Functions</span>
+          </Link>
         </li>
 
-        <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
-          <Link to='/errors'>Active Errors</Link>
+        <li>
+          <Link
+            to='/errors'
+            className='flex items-center space-x-3 text-lg font-semibold hover:text-blue-400'
+          >
+            <ExclamationTriangleIcon className='w-6 h-6 text-white' />
+            <span>Active Errors</span>
+          </Link>
         </li>
-        <li className='text-lg font-semibold hover:text-blue-400 cursor-pointer'>
-          <Link to='/settings'>Settings</Link>
-        </li>
+
+        {/* <li>
+          <Link
+            to='/settings'
+            className='flex items-center space-x-3 text-lg font-semibold hover:text-blue-400'
+          >
+            <Cog8ToothIcon className='w-6 h-6 text-white' />
+            <span>Settings</span>
+          </Link>
+        </li> */}
       </ul>
     </aside>
   );

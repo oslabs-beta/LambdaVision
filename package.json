@@ -25,6 +25,7 @@
     "@aws-sdk/client-cloudwatch": "^3.731.1",
     "@aws-sdk/client-cloudwatch-logs": "^3.744.0",
     "@aws-sdk/client-lambda": "^3.734.0",
+    "@heroicons/react": "^2.2.0",
     "amazon-cognito-identity-js": "^6.3.12",
     "autoprefixer": "^10.4.20",
     "aws-sdk": "^2.1692.0",

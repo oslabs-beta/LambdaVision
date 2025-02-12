@@ -115,4 +115,4 @@ If you encounter any bugs or have feature requests, please [open an issue](https
 <a href="https://www.linkedin.com/company/lambdavision/" target="blank">
  <img align="center" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="[Linkedin]" /></a
  
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="# LambdaVision - AWS Lambda Observability Platform">back to top</a>)</p>
