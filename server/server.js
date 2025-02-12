@@ -20,6 +20,8 @@ app.use(express.urlencoded({extended: true}));
 app.use("/api", awsRoutes);
 app.use("/api", userAuth);
 
+module.exports = app; // Export for testing 
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
