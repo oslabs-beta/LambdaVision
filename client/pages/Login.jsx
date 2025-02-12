@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -24,30 +25,15 @@ const Login = ({ onLogin }) => {
       );
       if (response.status === 200) {
         // Call the onLogin function
-        if (onLogin) {
+       
           onLogin();
-        }
+        
         // Redirect to the Metrics Overview page after successful signup
         navigate('/metrics');
       }
     } catch (error) {
-      //     setError('Invalid username or password.');
-      // }
-      if (error.response) {
-        // If the server responded with an error status
-        if (error.response.status === 401) {
           setError('Invalid username or password.');
-        } else if (error.response.status === 500) {
-          setError('Server error. Please try again later.');
-        } else {
-          setError(
-            error.response.data.error || 'An unexpected error occurred.'
-          );
-        }
-      } else {
-        // Network error (server is down or unreachable)
-        setError('Cannot connect to the server. Please try again later.');
-      }
+      
     }
   };
 
@@ -56,7 +42,7 @@ const Login = ({ onLogin }) => {
       <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-sm'>
         <h1 className='text-2xl font-bold text-center mb-4'>Login</h1>
         <p className='text-center text-gray-700 mb-6'>
-          Enter your credentials to continue
+          Enter your username and password to continue
         </p>
 
         <form onSubmit={handleSubmit}>

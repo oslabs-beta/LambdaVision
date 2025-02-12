@@ -68,7 +68,7 @@ const FunctionPage = () => {
   const invocationsData = [
     {
       time: new Date(),
-      value: metrics.Throttles,
+      value: metrics.Invocations,
     },
   ];
 
@@ -136,7 +136,7 @@ const FunctionPage = () => {
             title='Invocations'
             data={invocationsData}
             color={'blue'}
-            yLabel={'Milliseconds'}
+            yLabel={'Count'}
           />
         </div>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
@@ -144,12 +144,12 @@ const FunctionPage = () => {
             title='Duration'
             data={durationData}
             color={'green'}
-            yLabel={'Count'}
+            yLabel={'Milliseconds'}
           />
         </div>
       </div>
       <div>
-        <ErrorLog />
+        {/* <ErrorLog /> */}
       </div>
     </div>
   );
