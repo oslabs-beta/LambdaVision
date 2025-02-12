@@ -88,11 +88,11 @@ const FunctionPage = () => {
       <div className='mt-4 pb-2'>
         <select
           id='function-select'
-          className='mt-2 p-2 pb-3 border border-gray-300 rounded-md w-1/2'
+          class='bg-gray-50 border border-gray-300 text-black-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-1'
           value={selectedFunction}
           onChange={handleFunctionChange}
         >
-          <option value=''>-- Select a Function --</option>
+          <option value=''>Select a Function</option>
           {functions.map((func, index) => (
             <option key={index} value={func.name}>
               {func.name}
@@ -148,9 +148,7 @@ const FunctionPage = () => {
           />
         </div>
       </div>
-      <div>
-        {/* <ErrorLog /> */}
-      </div>
+      <div>{/* <ErrorLog /> */}</div>
     </div>
   );
 };
