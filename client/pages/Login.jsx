@@ -29,9 +29,7 @@ const Login = ({ onLogin }) => {
       );
       if (response.status === 200) {
         // Call the onLogin function
-
         onLogin();
-
         // Redirect to the Metrics Overview page after successful signup
         navigate('/metrics');
       }

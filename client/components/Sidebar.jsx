@@ -4,7 +4,7 @@ import {
   ChartBarIcon,
   CodeBracketIcon,
   ExclamationTriangleIcon,
-  Cog8ToothIcon,
+
 } from '@heroicons/react/24/solid';
 
 const Sidebar = () => {
@@ -41,15 +41,7 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        {/* <li>
-          <Link
-            to='/settings'
-            className='flex items-center space-x-3 text-lg font-semibold hover:text-blue-400'
-          >
-            <Cog8ToothIcon className='w-6 h-6 text-white' />
-            <span>Settings</span>
-          </Link>
-        </li> */}
+     
       </ul>
     </aside>
   );

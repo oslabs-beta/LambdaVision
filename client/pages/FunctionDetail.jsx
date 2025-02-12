@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MetricCard from '../components/MetricCard';
 import Chart from '../components/Chart';
-import ErrorLog from '../components/ErrorLog';
+
 import axios from 'axios';
 
 const FunctionPage = () => {
@@ -13,7 +13,7 @@ const FunctionPage = () => {
     Throttles: 0,
     ColdStartDuration: 0,
   });
-  // const [errorLogs, setErrorLogs] = useState([]);
+  
 
   //Function List
   const fetchFunctions = async () => {
@@ -38,17 +38,7 @@ const FunctionPage = () => {
       console.error('Error getting metrics', error);
     }
   };
-  //Error Logs
-  // const fetchErrorLogs = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       ''
-  //     );
-  //     setErrorLogs(response.data.errorLogs);
-  //   } catch (error) {
-  //     console.error('Error getting metrics', error);
-  //   }
-  // };
+
 
   useEffect(() => {
     fetchFunctions();
@@ -148,7 +138,7 @@ const FunctionPage = () => {
           />
         </div>
       </div>
-      <div>{/* <ErrorLog /> */}</div>
+
     </div>
   );
 };

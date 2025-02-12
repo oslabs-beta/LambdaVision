@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ErrorTable from '../components/ErrorTable';
 import axios from 'axios';
 
 const ErrorAlerts = () => {
