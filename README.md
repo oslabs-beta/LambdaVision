@@ -1,4 +1,4 @@
-<img src="client/assets/lambda-logo.png" alt="Logo" width="70">
+<img src="client/assets/lambda-logo.png" alt="Logo" width="150">
 
 # LambdaVision - AWS Lambda Observability Platform
 
@@ -8,8 +8,8 @@ LambdaVision enables software engineers to gain deep visibility into Lambda func
 
 
 ## Tech Stack 
-[![My Skills](https://skillicons.dev/icons?i=react,nodejs,express,tailwind,mongodb,webpack,d3,aws,jest)](https://skillicons.dev)
-React, Node.js, Express.js, Tailwind, MongoDB, Webpack, d3.js, AWS, Jest
+[![My Skills](https://skillicons.dev/icons?i=react,nodejs,express,tailwind,mongodb,webpack,d3,aws,jest)](https://skillicons.dev)  
+
 
 
 ## Table of Contents 
@@ -104,16 +104,11 @@ If you encounter any bugs or have feature requests, please [open an issue](https
 ## License
 
 ## Lambda Vision Team
-Daisha Davis
-[Github](https://github.com/daishadavis) | [Linkedin]()
-Tiara Dillard
-[Github](http://github.com/yosoytiara/) | [Linkedin]()
-Darren Estrada
-[Github](https://github.com/darrenestrada) | [Linkedin]()
-Jocelyn R
-[Github](https://github.com/1JocelynR) | [Linkedin]()
-Gaetan Fleurentin
-[Github](https://github.com/Gfleurentin) | [Linkedin]()
+- Daisha Davis [Github](https://github.com/daishadavis) | [Linkedin]()
+- Tiara Dillard [Github](http://github.com/yosoytiara/) | [Linkedin]()
+- Darren Estrada [Github](https://github.com/darrenestrada) | [Linkedin]()
+- Jocelyn R [Github](https://github.com/1JocelynR) | [Linkedin]()
+- Gaetan Fleurentin [Github](https://github.com/Gfleurentin) | [Linkedin]()
 
 
 ## Contact
