@@ -30,16 +30,33 @@ const MetricsOverview = () => {
 
 
   const fetchMetrics = async () => {
+    const token = localStorage.getItem("token"); // Retrieve the token
+
+    if (!token) {
+    console.error("⚠️ No token found in localStorage");
+    return; // Prevents API call if no token is found
+    } 
+
     try {
-      const response = await axios.get(
-        'http://localhost:3000/api/lambda/total-metrics');
-        setMetrics(response.data);
+      const response = await axios.get("http://localhost:3000/api/lambda/total-metrics", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      setMetrics(response.data);
     } catch (error) {
       console.error('There was an error getting metrics information', error);
     }
   };
 
   const fetchFunctionMetrics = async () => {
+    const token = localStorage.getItem("token"); // Retrieve the token
+
+    if (!token) {
+    console.error("⚠️ No token found in localStorage");
+    return; // Prevents API call if no token is found
+    }
     try {
       const response = await axios.get(
         `http://localhost:3000/api/lambda/functions/metrics`,{
