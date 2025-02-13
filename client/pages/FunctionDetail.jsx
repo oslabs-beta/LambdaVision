@@ -44,17 +44,8 @@ const FunctionPage = () => {
       console.error('Error getting metrics', error);
     }
   };
-  //Error Logs
-  // const fetchErrorLogs = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       ''
-  //     );
-  //     setErrorLogs(response.data.errorLogs);
-  //   } catch (error) {
-  //     console.error('Error getting metrics', error);
-  //   }
-  // };
+  
+
 
   useEffect(() => {
     fetchFunctions();

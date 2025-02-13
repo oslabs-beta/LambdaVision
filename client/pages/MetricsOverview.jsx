@@ -53,64 +53,25 @@ const MetricsOverview = () => {
     fetchFunctionMetrics();
   }, []);
 
-  //  //create an array for throttles data
-  //   const invocationsData = [
-  //     {
-  //       time: new Date(),
-  //       value: metrics.totalInvocations,
-  //     },
-  //   ];
+   //create an array for throttles data
+    const invocationsData = [
+      {
+        time: new Date(),
+        value: metrics.totalInvocations,
+      },
+    ];
 
-  //   //create an array for invocations data
+    //create an array for invocations data
 
-  //   const errorData = [
-  //     {
-  //       time: new Date(),
-  //       value: metrics.errorRate,
-  //     },
-  //   ];
-  const invocationsData = [
-    { time: new Date().setMinutes(new Date().getMinutes() - 10), value: 120 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 8), value: 150 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 6), value: 180 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 4), value: 210 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 2), value: 230 },
-  ];
-
-  const errorData = [
-    { time: new Date().setMinutes(new Date().getMinutes() - 10), value: 5 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 8), value: 8 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 6), value: 6 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 4), value: 10 },
-    { time: new Date().setMinutes(new Date().getMinutes() - 2), value: 7 },
-  ];
-
-  const functionMetricss = [
-    {
-      functionName: 'UserSignupHandler',
-      Invocations: 1200,
-      Errors: 15,
-      ColdStartDuration: 250,
-    },
-    {
-      functionName: 'OrderProcessing',
-      Invocations: 950,
-      Errors: 8,
-      ColdStartDuration: 180,
-    },
-    {
-      functionName: 'PaymentGateway',
-      Invocations: 1100,
-      Errors: 12,
-      ColdStartDuration: 200,
-    },
-    {
-      functionName: 'EmailNotification',
-      Invocations: 700,
-      Errors: 5,
-      ColdStartDuration: 160,
-    },
-  ];
+    const errorData = [
+      {
+        time: new Date(),
+        value: metrics.errorRate,
+      },
+    ];
+  
+  
+  
   return (
     <div className='App flex'>
       <div className='flex-1'>
@@ -204,41 +165,28 @@ const MetricsOverview = () => {
                 </tr>
               </thead>
               <tbody>
-                {functionMetricss.length > 0 ? (
-                  functionMetricss.map((func, index) => (
-                    <tr key={index} className='hover:bg-slate-50'>
-                      <td className='w-1/4 p-4 border-b border-slate-200'>
-                        <p className='block text-sm font-semibold text-slate-800'>
-                          {func.functionName}
-                        </p>
-                      </td>
-                      <td className='w-1/4 p-4 border-b border-slate-200'>
-                        <p className='block text-sm text-slate-800'>
-                          {func.Invocations}
-                        </p>
-                      </td>
-                      <td className='w-1/4 p-4 border-b border-slate-200'>
-                        <p className='block text-sm font-semibold text-red-500'>
-                          {func.Errors}
-                        </p>
-                      </td>
-                      <td className='w-1/4 p-4 border-b border-slate-200'>
-                        <p className='block text-sm text-slate-800'>
-                          {func.ColdStartDuration} ms
-                        </p>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan='5'
-                      className='border border-gray-300 p-2 text-center text-slate-500'
-                    >
-                      No function metrics available
-                    </td>
-                  </tr>
-                )}
+                <tr className='hover:bg-slate-50'>
+                  <td className='w-1/4 p-4 border-b border-slate-200'>
+                    <p className='block text-sm font-semibold text-slate-800'>
+                      {functionMetrics.functionName}
+                    </p>
+                  </td>
+                  <td className='w-1/4 p-4 border-b border-slate-200'>
+                    <p className='block text-sm text-slate-800'>
+                      {functionMetrics.Invocations}
+                    </p>
+                  </td>
+                  <td className='w-1/4 p-4 border-b border-slate-200'>
+                    <p className='block text-sm font-semibold text-red-500'>
+                      {functionMetrics.Errors}
+                    </p>
+                  </td>
+                  <td className='w-1/4 p-4 border-b border-slate-200'>
+                    <p className='block text-sm text-slate-800'>
+                      {functionMetrics.ColdStartDuration} ms
+                    </p>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
