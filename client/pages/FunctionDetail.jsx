@@ -63,11 +63,13 @@ const FunctionPage = () => {
           },
         }
       );
+      const { metrics } = response.data;
+
       setMetrics({
-        Invocations: response.data.Invocations || 0,
-        Errors: response.data.Errors || 0,
-        Throttles: response.data.Throttles || 0,
-        ColdStartDuration: response.data.ColdStartDuration || 0,
+        Invocations: metrics.Invocations || 0,
+        Errors: metrics.Errors || 0,
+        Throttles: metrics.Throttles || 0,
+        ColdStartDuration: metrics.ColdStartDuration || 0,
       });
     } catch (error) {
       console.error('Error getting metrics', error);
@@ -88,23 +90,6 @@ const FunctionPage = () => {
   const handleFunctionChange = (event) => {
     setSelectedFunction(event.target.value);
   };
-
-  //create an array for throttles data
-  const invocationsData = [
-    {
-      time: new Date(),
-      value: metrics.Invocations,
-    },
-  ];
-
-  //create an array for invocations data
-
-  const durationData = [
-    {
-      time: new Date(),
-      value: metrics.ColdStartDuration,
-    },
-  ];
 
   return (
     <div>
@@ -174,16 +159,18 @@ const FunctionPage = () => {
       <div className='flex gap-6 mt-8'>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
           <Chart
+            key={metrics.Invocations} // Force re-render
             title='Invocations'
-            data={invocationsData}
+            data={[{ time: new Date(), value: metrics.Invocations }]}
             color={'blue'}
             yLabel={'Count'}
           />
         </div>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
           <Chart
+            key={metrics.ColdStartDuration} //  Force re-render
             title='Duration'
-            data={durationData}
+            data={[{ time: new Date(), value: metrics.ColdStartDuration }]}
             color={'green'}
             yLabel={'Milliseconds'}
           />

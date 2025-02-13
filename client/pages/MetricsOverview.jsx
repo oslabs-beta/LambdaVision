@@ -89,7 +89,7 @@ const MetricsOverview = () => {
   const errorData = [
     {
       time: new Date(),
-      value: metrics.errorRate,
+      value: metrics.totalErrors,
     },
   ];
 
@@ -150,7 +150,7 @@ const MetricsOverview = () => {
             </div>
             <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
               <Chart
-                title='Error Rate'
+                title='Errors'
                 data={errorData}
                 color={'red'}
                 yLabel={'Count'}
