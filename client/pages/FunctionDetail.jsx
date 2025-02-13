@@ -6,7 +6,7 @@ import axios from 'axios';
 import {
   ExclamationTriangleIcon,
   ExclamationCircleIcon,
-BoltIcon,
+  BoltIcon,
   ClockIcon,
 } from '@heroicons/react/24/solid';
 
@@ -27,18 +27,18 @@ const FunctionPage = () => {
       const token = localStorage.getItem('token'); // Get the token
 
       if (!token) {
-      console.error("🚨 No token found in local storage");
-      return; // Stop execution if no token is available
+        console.error('🚨 No token found in local storage');
+        return; // Stop execution if no token is available
       }
 
-    const response = await axios.get(
-      'http://localhost:3000/api/lambda/total-functions',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+      const response = await axios.get(
+        'http://localhost:3000/api/lambda/total-functions',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(response);
       setFunctions(response.data.functions);
     } catch (error) {
@@ -51,39 +51,35 @@ const FunctionPage = () => {
       const token = localStorage.getItem('token'); // Get the token
 
       if (!token) {
-      console.error("🚨 No token found in local storage");
-      return; // Stop execution if no token is available
+        console.error('🚨 No token found in local storage');
+        return; // Stop execution if no token is available
       }
-      
+
       const response = await axios.get(
-        `http://localhost:3000/api/lambda/functions/${functionName}/metrics`,{
+        `http://localhost:3000/api/lambda/functions/${functionName}/metrics`,
+        {
           headers: {
-        Authorization: `Bearer ${token}`
-      }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      setMetrics(response.data);
+      setMetrics({
+        Invocations: response.data.Invocations || 0,
+        Errors: response.data.Errors || 0,
+        Throttles: response.data.Throttles || 0,
+        ColdStartDuration: response.data.ColdStartDuration || 0,
+      });
     } catch (error) {
       console.error('Error getting metrics', error);
     }
   };
-  //Error Logs
-  // const fetchErrorLogs = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       ''
-  //     );
-  //     setErrorLogs(response.data.errorLogs);
-  //   } catch (error) {
-  //     console.error('Error getting metrics', error);
-  //   }
-  // };
 
   useEffect(() => {
     fetchFunctions();
   }, []);
 
   useEffect(() => {
+    console.log('Selected function changed:', selectedFunction);
     if (selectedFunction) {
       fetchFunctionMetrics(selectedFunction);
     }
@@ -117,7 +113,7 @@ const FunctionPage = () => {
       <div className='mt-4 pb-2'>
         <select
           id='function-select'
-          class='bg-gray-50 border border-gray-300 text-black-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-1'
+          className='bg-gray-50 border border-gray-300 text-black-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-1'
           value={selectedFunction}
           onChange={handleFunctionChange}
         >
@@ -193,7 +189,6 @@ const FunctionPage = () => {
           />
         </div>
       </div>
-      <div>{/* <ErrorLog /> */}</div>
     </div>
   );
 };
