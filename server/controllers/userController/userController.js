@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 exports.userSignup = async (req, res) => {
@@ -9,6 +9,12 @@ exports.userSignup = async (req, res) => {
     // Error handling for missing fields
     if (!email || !password || !username) {
         return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+        return res.status(400).json({ error: 'Username already taken' });
     }
 
     try {
@@ -22,7 +28,7 @@ exports.userSignup = async (req, res) => {
         res.status(201).json({ message: "User successfully created" });
     } catch (error) {
         console.error('Signup error:', error);
-        res.status(400).json({ error: "User already exists" });
+        res.status(500).json({ error: "Server error" });
     }
 };
 
@@ -51,4 +57,3 @@ exports.userLogin = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-

@@ -8,10 +8,13 @@ const connectDB = require("./config/db")
 const app = express();
 connectDB();
 
-app.use(cors({
-    origin: "http://localhost:8080", 
-    credentials: true, 
-  }));
+app.use(
+  cors({
+    origin: ["http://localhost:8080", "http://localhost:3000"], // Add your front-end origins
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow Authorization header
+  })
+);
   
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

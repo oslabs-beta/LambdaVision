@@ -18,9 +18,21 @@ const FunctionPage = () => {
   //Function List
   const fetchFunctions = async () => {
     try {
-      const response = await axios.get(
-        'http://localhost:3000/api/lambda/total-functions'
-      );
+      const token = localStorage.getItem('token'); // Get the token
+
+    if (!token) {
+      console.error("🚨 No token found in local storage");
+      return; // Stop execution if no token is available
+    }
+
+    const response = await axios.get(
+      'http://localhost:3000/api/lambda/total-functions',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
       console.log(response);
       setFunctions(response.data.functions);
     } catch (error) {
@@ -31,24 +43,18 @@ const FunctionPage = () => {
   const fetchFunctionMetrics = async (functionName) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/lambda/functions/${functionName}/metrics`
+        `http://localhost:3000/api/lambda/functions/${functionName}/metrics`,{
+          headers: {
+        Authorization: `Bearer ${token}`
+      }
+        }
       );
       setMetrics(response.data);
     } catch (error) {
       console.error('Error getting metrics', error);
     }
   };
-  //Error Logs
-  // const fetchErrorLogs = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       ''
-  //     );
-  //     setErrorLogs(response.data.errorLogs);
-  //   } catch (error) {
-  //     console.error('Error getting metrics', error);
-  //   }
-  // };
+
 
   useEffect(() => {
     fetchFunctions();
@@ -148,7 +154,7 @@ const FunctionPage = () => {
           />
         </div>
       </div>
-      <div>{/* <ErrorLog /> */}</div>
+
     </div>
   );
 };

@@ -4,7 +4,7 @@ const User = require('../../models/User');
 exports.getLambdaFunctions = async (req, res) => {
     try {
         // Step 1: Get userId from request parameters
-        const userId = req.params.userId;
+        const userId = req.user.id; // Ensure userId is taken from JWT middleware
 
         // Step 2: Find user in database by userId
         const user = await User.findById(userId);
@@ -15,6 +15,11 @@ exports.getLambdaFunctions = async (req, res) => {
         // Step 3: Extract credentials from database
         const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION } = user.awsCredential;
 
+        // Check if any AWS credential is missing
+        if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !AWS_REGION) {
+            return res.status(403).json({ error: "Incomplete AWS credentials" });
+        }
+
         // Step 4: Create a new Lambda client instance using the user's credentials
         const client = new LambdaClient({
             region: AWS_REGION,
@@ -24,11 +29,13 @@ exports.getLambdaFunctions = async (req, res) => {
             }
         });
 
-        // Step 5: List Lambda functions
-        const command = new ListFunctionsCommand({});
-        const response = await client.send(command);
+        // Step 5: Create and send the ListFunctions command properly
+        const command = new ListFunctionsCommand({}); // Instantiate properly
+        const response = await client.send(command); // Send command
 
-        // Step 6: Format and send the response
+        // Step 6: Log and return response
+        console.log("Lambda functions response:", response.Functions);
+
         if (response.Functions && response.Functions.length > 0) {
             const functionsArray = response.Functions.map(func => ({
                 name: func.FunctionName,

@@ -7,19 +7,49 @@ const SettingsPage = () => {
   const [secretKey, setSecretsKey] = useState('');
   const [region, setRegion] = useState('');
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+ 
+    setLoading(true);
+
+    const token = localStorage.getItem('token');
+    console.log("Token being sent in request:", token); 
+
+    if (!token) {
+        console.error('No token found');
+        return;
+    }
+
+
     try {
-      await axios.post('http://localhost:3000/api/lambda/credentials', {
-        accessKey,
-        secretKey,
-        region,
-      });
+      const response = await axios.post(
+      "http://localhost:3000/api/lambda/credentials",
+      {
+        accessKey, 
+        secretKey, 
+        region
+      },
+      {
+        headers: {
+          "Content-Type": "application/json", // ✅ Ensure correct content type
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    
+    console.log("Response:", response.data);
       setSaved(true);
+      setAccessKey('');
+      setSecretsKey('');
+      setRegion('');
     } catch (error) {
       console.error('Error saving settings', error);
+    } finally {
+      setLoading(false); 
     }
+  
   };
   const awsRegions = [
     { value: 'us-east-2', label: 'US East (Ohio)' },
@@ -114,8 +144,9 @@ const SettingsPage = () => {
           <button
             type='submit'
             className='w-full bg-gray-800 text-white p-2 rounded-md hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-400'
+            disabled={loading} // Disable the button while loading
           >
-            Save Changes
+            {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
 

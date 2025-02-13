@@ -36,6 +36,7 @@
     "d3": "^7.9.0",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongoose": "^8.9.5",
     "postcss": "^8.5.1",
     "react": "^19.0.0",

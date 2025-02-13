@@ -19,13 +19,18 @@ const MetricsOverview = () => {
     ColdStartDuration: 0,
   });
   
-
+  const token = localStorage.getItem('token'); // Retrieve the token from localStorage or wherever it is stored
+  console.log('Token:', token);
 
 
   const fetchMetrics = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3000/api/lambda/total-metrics');
+        'http://localhost:3000/api/lambda/total-metrics', {
+          headers: {
+        Authorization: `Bearer ${token}`
+      }
+        });
         setMetrics(response.data);
     } catch (error) {
       console.error('There was an error getting metrics information', error);
@@ -35,7 +40,11 @@ const MetricsOverview = () => {
    const fetchFunctionMetrics = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/lambda/functions/metrics`
+        `http://localhost:3000/api/lambda/functions/metrics`,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+        }
       );
       setFunctionMetrics(response.data);
     } catch (error) {
