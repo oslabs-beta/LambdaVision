@@ -1,50 +1,50 @@
+const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
-
 exports.awsCredentials = async (req, res) => {
-    // Get user's AWS credential input from request body
-    const { accessKey, secretAccessKey, region } = req.body;
+    console.log("🟡 Received request body:", req.body);
+    console.log("🟡 Headers:", req.headers);
 
-    // Error handling - if data is missing, return error
-    if (!accessKey || !secretAccessKey || !region) {
+    // 🔍 Fix: Ensure correct destructuring
+    const { accessKey, secretKey, region } = req.body; // Check variable names
+
+    // 🔥 Log received values
+    console.log("Extracted Fields:");
+    console.log("  - Access Key:", accessKey);
+    console.log("  - Secret Key:", secretKey);
+    console.log("  - Region:", region);
+
+    // ❌ If any value is undefined, return error
+    if (!accessKey || !secretKey || !region) {
+        console.error("🔴 Missing required fields in request body:", req.body);
         return res.status(400).json({ error: 'Missing required properties in request body' });
     }
 
-    // Extract JWT from the request headers
-    const token = req.headers['authorization']?.split(' ')[1]; //Bearer token
-    if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
-
     try {
-        // Verify the token and extract user info
+        // ✅ Process token and save credentials as before...
+        const authHeader = req.headers['authorization'];
+        const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id; // User ID from token payload
-
-        // New credential object to store in database
-        const newCredentials = {
-            AWS_ACCESS_KEY_ID: accessKey,
-            AWS_SECRET_ACCESS_KEY: secretAccessKey,
-            AWS_REGION: region,
-        };
-
-        // Find the user by userId and update their AWS credentials
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,  //  userId from decoded JWT token
-            { $set: { awsCredential: newCredentials } },  // Update awsCredential field
-            { new: true, runValidators: true }  // Ensure the updated user is returned
-        );
-
-        // If no user is found with the given userId
-        if (!updatedUser) {
+        const userId = decoded.id;
+        
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Successfully updated AWS credentials
-        return res.status(200).json({ message: 'AWS credentials successfully updated', user: updatedUser });
+        // ✅ Save credentials correctly
+        user.awsCredential = {
+            AWS_ACCESS_KEY_ID: accessKey,
+            AWS_SECRET_ACCESS_KEY: secretKey, // 🔍 Fix key name to match request
+            AWS_REGION: region
+        };
+
+        await user.save();
+        console.log("🟢 AWS credentials saved successfully:", user.awsCredential);
+
+        return res.status(200).json({ message: 'AWS credentials successfully updated', user });
     } catch (error) {
-        // Catch any errors and return them in the response
-        console.error('Error updating AWS credentials:', error);
-        return res.status(500).json({ error: 'Error updating AWS credentials' });
+        console.error('🔴 Error updating AWS credentials:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

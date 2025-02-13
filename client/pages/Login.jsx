@@ -26,13 +26,13 @@ const Login = ({ onLogin }) => {
         {
           withCredentials: true,
         }
+        
       );
       if (response.status === 200) {
-        // Call the onLogin function
+        console.log("Login successful, received token:", response.data.token); // ✅ Debug log
 
-        onLogin();
-
-        // Redirect to the Metrics Overview page after successful signup
+        localStorage.setItem("token", response.data.token);  // ✅ Store token
+        onLogin(); 
         navigate('/metrics');
       }
     } catch (error) {

@@ -1,11 +1,11 @@
-const { LambdaClient } = require('@aws-sdk/client-lambda');
+const { LambdaClient, ListFunctionsCommand } = require('@aws-sdk/client-lambda');
 const { CloudWatchClient, GetMetricStatisticsCommand } = require("@aws-sdk/client-cloudwatch");
 const User = require("../../models/User");
 
 exports.getTotalMetrics = async (req, res) => {
   try {
     // Get the user ID from request (assuming it's from JWT authentication)
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     // Find user in database by userId
     const user = await User.findById(userId);
@@ -33,8 +33,11 @@ exports.getTotalMetrics = async (req, res) => {
       }
     });
 
-    // Fetch all Lambda functions for the user
-    const functionsData = await lambdaClient.listFunctions({});
+    // Fetch all Lambda functions for the user (✅ Fixed method)
+    const command = new ListFunctionsCommand({});
+    const functionsData = await lambdaClient.send(command);
+
+    // Extract function names
     const functionNames = functionsData.Functions.map((fn) => fn.FunctionName);
 
     let totalInvocations = 0;
@@ -60,7 +63,7 @@ exports.getTotalMetrics = async (req, res) => {
       const values = data.Datapoints && data.Datapoints.length > 0
         ? data.Datapoints.map((dp) => dp[statistic] || 0)
         : [0];
-        
+
       return values.reduce((sum, value) => sum + value, 0); // Aggregate metric values
     }
 
@@ -75,7 +78,7 @@ exports.getTotalMetrics = async (req, res) => {
       totalDuration += duration;
     }
 
-    //  Calculate error rate (if invocations > 0)
+    // Calculate error rate (if invocations > 0)
     const errorRate = totalInvocations > 0 ? (totalErrors / totalInvocations) * 100 : 0;
 
     // Respond with metrics
@@ -87,7 +90,7 @@ exports.getTotalMetrics = async (req, res) => {
       averageDuration: (totalDuration / functionNames.length).toFixed(2) + " ms",
     });
   } catch (err) {
-    console.error("Error fetching Lambda metrics:", err);
+    console.error("❌ Error fetching Lambda metrics:", err);
     res.status(500).json({ error: "Failed to fetch Lambda metrics" });
   }
 };

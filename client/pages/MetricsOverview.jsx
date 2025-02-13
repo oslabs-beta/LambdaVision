@@ -25,13 +25,15 @@ const MetricsOverview = () => {
     Throttles: 0,
     ColdStartDuration: 0,
   });
+  
+
+
 
   const fetchMetrics = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3000/api/lambda/total-metrics'
-      );
-      setMetrics(response.data);
+        'http://localhost:3000/api/lambda/total-metrics');
+        setMetrics(response.data);
     } catch (error) {
       console.error('There was an error getting metrics information', error);
     }
@@ -40,7 +42,11 @@ const MetricsOverview = () => {
   const fetchFunctionMetrics = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/lambda/functions/metrics`
+        `http://localhost:3000/api/lambda/functions/metrics`,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+        }
       );
       setFunctionMetrics(response.data);
     } catch (error) {
