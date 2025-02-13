@@ -98,6 +98,7 @@ const SettingsPage = () => {
             <label className='block text-sm font-medium text-gray-700'>
               Region:
             </label>
+           
             <select
               id='region'
               value={region}
