@@ -33,9 +33,6 @@ exports.getLambdaFunctions = async (req, res) => {
         const command = new ListFunctionsCommand({}); // Instantiate properly
         const response = await client.send(command); // Send command
 
-        // Step 6: Log and return response
-        console.log("Lambda functions response:", response.Functions);
-
         if (response.Functions && response.Functions.length > 0) {
             const functionsArray = response.Functions.map(func => ({
                 name: func.FunctionName,

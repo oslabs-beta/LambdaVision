@@ -47,24 +47,16 @@ To get started with LambdaVision, follow the instructions below to set up the pr
    git clone https://github.com/yourusername/LambdaVision.git
    cd LambdaVision
    ```
-
 ---
 
-Install dependencies:
-bash
-Copy
-npm install
-
-Configure AWS credentials: Make sure your AWS credentials are set up using AWS CLI or environment variables.
-bash
-Copy
-aws configure
-
-Deploy Lambda functions (Optional, if using Serverless Framework): If you are using Serverless, deploy the functions with:
-bash
-Copy
-serverless deploy
-
+2. Install dependencies:
+ ```bash
+  npm install
+```
+3. Start client and server
+ ```bash
+  npm start
+```
 ## UserGuide
 
 ## Contribution Instructions
@@ -107,7 +99,7 @@ We welcome contributions to **LambdaVision**! If you'd like to contribute, pleas
 If you encounter any bugs or have feature requests, please [open an issue](https://github.com/yourusername/LambdaVision/issues) and provide as much detail as possible.
 
 ## License
-
+This project is licensed under the terms of the MIT license.
 ## Lambda Vision Team
 
 - Daisha Davis [Github](https://github.com/daishadavis) | [Linkedin]()
