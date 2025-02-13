@@ -59,7 +59,7 @@ const ErrorAlerts = () => {
           errorList.map((error, index) => (
             <div
               key={index}
-              className='bg-red-100 border-l-4 border-red-500 shadow-md rounded-lg p-5 w-full'
+              className='bg-red-100 border-l-4 border-red-500 shadow-md rounded-lg p-5 w-full hover:bg-red-200 hover:shadow-lg transition-all duration-200'
             >
               <div className='flex items-center mb-2'>
                 <div className='w-4 h-4 bg-red-500 rounded-full mr-2'></div>

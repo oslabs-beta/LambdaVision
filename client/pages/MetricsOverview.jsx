@@ -1,15 +1,22 @@
+import React from 'react';
+import Chart from '../components/Chart';
+import MetricCard from '../components/MetricCard';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  ExclamationTriangleIcon,
+  CodeBracketIcon,BoltIcon,ClockIcon
+} from '@heroicons/react/24/solid';
 
-import React from "react";
-import Chart from "../components/Chart";
-import MetricCard from "../components/MetricCard";
-
-import {useState, useEffect} from 'react' 
-import axios from 'axios'
-
- 
 const MetricsOverview = () => {
-  const[metrics, setMetrics] = useState([
-    {totalFunctions: 0, totalInvocations:0, totalErrors:0, errorRate:0, averageDuration: 0},
+  const [metrics, setMetrics] = useState([
+    {
+      totalFunctions: 0,
+      totalInvocations: 0,
+      totalErrors: 0,
+      errorRate: 0,
+      averageDuration: 0,
+    },
   ]);
   const [functionMetrics, setFunctionMetrics] = useState({
     functionName: '',
@@ -18,21 +25,19 @@ const MetricsOverview = () => {
     Throttles: 0,
     ColdStartDuration: 0,
   });
-  
-
-
 
   const fetchMetrics = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3000/api/lambda/total-metrics');
-        setMetrics(response.data);
+        'http://localhost:3000/api/lambda/total-metrics'
+      );
+      setMetrics(response.data);
     } catch (error) {
       console.error('There was an error getting metrics information', error);
     }
   };
 
-   const fetchFunctionMetrics = async () => {
+  const fetchFunctionMetrics = async () => {
     try {
       const response = await axios.get(
         `http://localhost:3000/api/lambda/functions/metrics`
@@ -44,107 +49,199 @@ const MetricsOverview = () => {
   };
 
   useEffect(() => {
-  fetchMetrics();
- fetchFunctionMetrics();
-}, []);
+    fetchMetrics();
+    fetchFunctionMetrics();
+  }, []);
 
+  //  //create an array for throttles data
+  //   const invocationsData = [
+  //     {
+  //       time: new Date(),
+  //       value: metrics.totalInvocations,
+  //     },
+  //   ];
 
+  //   //create an array for invocations data
 
- //create an array for throttles data
+  //   const errorData = [
+  //     {
+  //       time: new Date(),
+  //       value: metrics.errorRate,
+  //     },
+  //   ];
   const invocationsData = [
-    {
-      time: new Date(),
-      value: metrics.totalInvocations,
-    },
+    { time: new Date().setMinutes(new Date().getMinutes() - 10), value: 120 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 8), value: 150 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 6), value: 180 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 4), value: 210 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 2), value: 230 },
   ];
-
-  //create an array for invocations data
 
   const errorData = [
-    {
-      time: new Date(),
-      value: metrics.errorRate,
-    },
+    { time: new Date().setMinutes(new Date().getMinutes() - 10), value: 5 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 8), value: 8 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 6), value: 6 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 4), value: 10 },
+    { time: new Date().setMinutes(new Date().getMinutes() - 2), value: 7 },
   ];
 
+  const functionMetricss = [
+    {
+      functionName: 'UserSignupHandler',
+      Invocations: 1200,
+      Errors: 15,
+      ColdStartDuration: 250,
+    },
+    {
+      functionName: 'OrderProcessing',
+      Invocations: 950,
+      Errors: 8,
+      ColdStartDuration: 180,
+    },
+    {
+      functionName: 'PaymentGateway',
+      Invocations: 1100,
+      Errors: 12,
+      ColdStartDuration: 200,
+    },
+    {
+      functionName: 'EmailNotification',
+      Invocations: 700,
+      Errors: 5,
+      ColdStartDuration: 160,
+    },
+  ];
   return (
-    <div className="App flex">
-      <div className="flex-1">
-        <div className="p-6 space-y-6">
-   
-          <div className= "flex flex-wrap gap-4">    
-
-          <MetricCard
-          title='Total Functions'
-          metric={metrics.totalFunctions}
-        ></MetricCard>
-
-          <MetricCard
-          title='Total Invocations'
-          metric={metrics.totalInvocations}
-        ></MetricCard>
+    <div className='App flex'>
+      <div className='flex-1'>
+        <div className='p-6 space-y-6'>
+          <div className='flex flex-wrap gap-4'>
+            <MetricCard
+              title={
+                <div className='flex items-center space-x-2'>
+                  <CodeBracketIcon className='w-6 h-6 text-gray-400' />
+                  <span>Total Functions</span>
+                </div>
+              }
+              metric={metrics.totalFunctions}
+            ></MetricCard>
 
             <MetricCard
-          title='Total Errors'
-          metric={metrics.totalErrors}
-        ></MetricCard>
+              title={
+                <div className='flex items-center space-x-2'>
+                  <BoltIcon className='w-6 h-6 text-gray-400' />
+                  <span>Total Invocations</span>
+                </div>
+              }
+              metric={metrics.totalInvocations}
+            ></MetricCard>
 
-    
+            <MetricCard
+              title={
+                <div className='flex items-center space-x-2'>
+                  <ExclamationTriangleIcon className='w-6 h-6 text-gray-400' />
+                  <span>Total Errors</span>
+                </div>
+              }
+              metric={metrics.totalErrors}
+            ></MetricCard>
 
-        <MetricCard
-          title='Average Duration'
-          metric={metrics.averageDuration}
-        ></MetricCard>
-
-        </div>
+            <MetricCard
+              title={
+                <div className='flex items-center space-x-2'>
+                  <ClockIcon className='w-6 h-6 text-gray-400' />
+                  <span>Average Duration</span>
+                </div>
+              }
+              metric={metrics.averageDuration}
+            ></MetricCard>
+          </div>
           {/* Charts Section */}
-       <div className='flex gap-4 p-5'>
-       <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
-            <Chart
-            title='Invocations'
-            data={invocationsData}
-            color={'orange'}
-            yLabel={'Count'}
-          />
+          <div className='flex gap-4 p-5'>
+            <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
+              <Chart
+                title='Invocations'
+                data={invocationsData}
+                color={'orange'}
+                yLabel={'Count'}
+              />
+            </div>
+            <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
+              <Chart
+                title='Error Rate'
+                data={errorData}
+                color={'red'}
+                yLabel={'Count'}
+              />
+            </div>
           </div>
-          <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
-            <Chart
-            title='Error Rate'
-            data={errorData}
-            color={'red'}
-            yLabel={'Count'}
-          />
-          </div>
-      </div>
 
           {/* Lambda Functions Table */}
-     <table className="border-collapse mt-5 border border-gray-300 bg-white w-full">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Function Name</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Invocations</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Errors</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Cold Start Duration</th>
-            </tr>
-          </thead>
-          <tbody>
-           {functionMetrics.functionName ? (
-                  <tr>
-                    <td className="px-6 py-4 text-sm text-gray-700">{functionMetrics.functionName}</td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{functionMetrics.Invocations}</td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{functionMetrics.Errors}</td>
-                    <td className="px-6 py-4 text-sm text-gray-700">{functionMetrics.ColdStartDuration}</td>
-                  </tr>
-                
-              ) : (
+          <div className='relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border'>
+            <table className='w-full text-left table-auto min-w-max '>
+              <thead>
                 <tr>
-                  <td colSpan="4" className="border border-gray-300 p-2 text-center">
-                    No function metrics available
-                  </td>
+                  <th className='w-1/4 p-4 border-b border-slate-300 bg-slate-50'>
+                    <p className='block text-sm font-normal leading-none text-slate-500'>
+                      Function Name
+                    </p>
+                  </th>
+                  <th className='w-1/4 p-4 border-b border-slate-300 bg-slate-50'>
+                    <p className='block text-sm font-normal leading-none text-slate-500'>
+                      Invocations
+                    </p>
+                  </th>
+                  <th className='w-1/4 p-4 border-b border-slate-300 bg-slate-50'>
+                    <p className='block text-sm font-normal leading-none text-slate-500'>
+                      Errors
+                    </p>
+                  </th>
+                  <th className='w-1/4 p-4 border-b border-slate-300 bg-slate-50'>
+                    <p className='block text-sm font-normal leading-none text-slate-500'>
+                      Cold Start Duration
+                    </p>
+                  </th>
                 </tr>
-              )}
-            </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {functionMetricss.length > 0 ? (
+                  functionMetricss.map((func, index) => (
+                    <tr key={index} className='hover:bg-slate-50'>
+                      <td className='w-1/4 p-4 border-b border-slate-200'>
+                        <p className='block text-sm font-semibold text-slate-800'>
+                          {func.functionName}
+                        </p>
+                      </td>
+                      <td className='w-1/4 p-4 border-b border-slate-200'>
+                        <p className='block text-sm text-slate-800'>
+                          {func.Invocations}
+                        </p>
+                      </td>
+                      <td className='w-1/4 p-4 border-b border-slate-200'>
+                        <p className='block text-sm font-semibold text-red-500'>
+                          {func.Errors}
+                        </p>
+                      </td>
+                      <td className='w-1/4 p-4 border-b border-slate-200'>
+                        <p className='block text-sm text-slate-800'>
+                          {func.ColdStartDuration} ms
+                        </p>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan='5'
+                      className='border border-gray-300 p-2 text-center text-slate-500'
+                    >
+                      No function metrics available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -152,7 +249,3 @@ const MetricsOverview = () => {
 };
 
 export default MetricsOverview;
-
-
-
-

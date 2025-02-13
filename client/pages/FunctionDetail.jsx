@@ -3,6 +3,12 @@ import MetricCard from '../components/MetricCard';
 import Chart from '../components/Chart';
 import ErrorLog from '../components/ErrorLog';
 import axios from 'axios';
+import {
+  ExclamationTriangleIcon,
+  ExclamationCircleIcon,
+BoltIcon,
+  ClockIcon,
+} from '@heroicons/react/24/solid';
 
 const FunctionPage = () => {
   const [functions, setFunctions] = useState([]);
@@ -83,7 +89,7 @@ const FunctionPage = () => {
 
   return (
     <div>
-      <h1 className='text-2xl font-bold text-gray-800'>Function Detail</h1>
+      <h1 className='text-2xl font-bold text-gray-800 mb-6'>Function Detail</h1>
 
       <div className='mt-4 pb-2'>
         <select
@@ -100,37 +106,53 @@ const FunctionPage = () => {
           ))}
         </select>
       </div>
-      <div className='flex flex-wrap gap-4'>
+      <div className='flex flex-wrap gap-6 mt-8'>
         <MetricCard
-          title='Total Invocations'
+          title={
+            <div className='flex items-center space-x-2'>
+              <BoltIcon className='w-6 h-6 text-gray-400' />
+              <span>Total Invocations</span>
+            </div>
+          }
           metric={metrics.Invocations}
-          // description='+12.3% vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
-          title='Error Rate'
+          title={
+            <div className='flex items-center space-x-2'>
+              <ExclamationTriangleIcon className='w-6 h-6 text-gray-400' />
+              <span>Error Rate</span>
+            </div>
+          }
           metric={`${metrics.Errors} %`}
-          // description='-0.1% vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
-          title='Throttles'
+          title={
+            <div className='flex items-center space-x-2'>
+              <ExclamationCircleIcon className='w-6 h-6 text-gray-400' />
+              <span>Throttles</span>
+            </div>
+          }
           metric={`${metrics.Throttles}`}
-          // description='+5ms vs last period'
         >
           {' '}
         </MetricCard>
         <MetricCard
-          title='Cold Starts'
+          title={
+            <div className='flex items-center space-x-2'>
+              <ClockIcon className='w-6 h-6 text-gray-400' />
+              <span>Cold Start</span>
+            </div>
+          }
           metric={metrics.ColdStartDuration}
-          // description='-23% vs last period'
         >
           {' '}
         </MetricCard>
       </div>
-      <div className='flex gap-4 p-5'>
+      <div className='flex gap-6 mt-8'>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
           <Chart
             title='Invocations'
@@ -148,7 +170,6 @@ const FunctionPage = () => {
           />
         </div>
       </div>
-      <div>{/* <ErrorLog /> */}</div>
     </div>
   );
 };
