@@ -2,17 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
 exports.awsCredentials = async (req, res) => {
-    console.log("🟡 Received request body:", req.body);
-    console.log("🟡 Headers:", req.headers);
+    
 
     // 🔍 Fix: Ensure correct destructuring
     const { accessKey, secretKey, region } = req.body; // Check variable names
-
-    // 🔥 Log received values
-    console.log("Extracted Fields:");
-    console.log("  - Access Key:", accessKey);
-    console.log("  - Secret Key:", secretKey);
-    console.log("  - Region:", region);
 
     // ❌ If any value is undefined, return error
     if (!accessKey || !secretKey || !region) {
@@ -40,7 +33,7 @@ exports.awsCredentials = async (req, res) => {
         };
 
         await user.save();
-        console.log("🟢 AWS credentials saved successfully:", user.awsCredential);
+        
 
         return res.status(200).json({ message: 'AWS credentials successfully updated', user });
     } catch (error) {
