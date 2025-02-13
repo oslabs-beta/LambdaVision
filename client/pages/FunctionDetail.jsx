@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MetricCard from '../components/MetricCard';
 import Chart from '../components/Chart';
-import ErrorLog from '../components/ErrorLog';
 import axios from 'axios';
 import {
   ExclamationTriangleIcon,
@@ -19,60 +18,68 @@ const FunctionPage = () => {
     Throttles: 0,
     ColdStartDuration: 0,
   });
-  // const [errorLogs, setErrorLogs] = useState([]);
 
-  //Function List
+  // 🔍 Fetch Lambda functions list
   const fetchFunctions = async () => {
     try {
-      const token = localStorage.getItem('token'); // Get the token
+      const token = localStorage.getItem('token');
 
       if (!token) {
         console.error('🚨 No token found in local storage');
-        return; // Stop execution if no token is available
+        return;
       }
 
+      
       const response = await axios.get(
         'http://localhost:3000/api/lambda/total-functions',
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response);
-      setFunctions(response.data.functions);
+
+      
+      setFunctions(response.data.functions || []);
     } catch (error) {
-      console.error('Error fetching functions', error.message);
+      console.error('❌ Error fetching functions:', error.message);
     }
   };
-  //Metric Cards & Charts
+
+  // 🔍 Fetch function metrics
   const fetchFunctionMetrics = async (functionName) => {
     try {
-      const token = localStorage.getItem('token'); // Get the token
+      const token = localStorage.getItem('token');
 
       if (!token) {
         console.error('🚨 No token found in local storage');
-        return; // Stop execution if no token is available
+        return;
       }
 
+      
       const response = await axios.get(
         `http://localhost:3000/api/lambda/functions/${functionName}/metrics`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
+
+      
+
       const { metrics } = response.data;
 
-      setMetrics({
-        Invocations: metrics.Invocations || 0,
-        Errors: metrics.Errors || 0,
-        Throttles: metrics.Throttles || 0,
-        ColdStartDuration: metrics.ColdStartDuration || 0,
+      setMetrics((prevMetrics) => {
+        const newMetrics = {
+          Invocations: metrics?.Invocations || 0,
+          Errors: metrics?.Errors || 0,
+          Throttles: metrics?.Throttles || 0,
+          ColdStartDuration: metrics?.ColdStartDuration || 0,
+        };
+
+       
+
+        return newMetrics;
       });
     } catch (error) {
-      console.error('Error getting metrics', error);
+      console.error('❌ Error getting metrics:', error);
     }
   };
 
@@ -81,20 +88,22 @@ const FunctionPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Selected function changed:', selectedFunction);
+    console.log('🔄 Selected function changed:', selectedFunction);
     if (selectedFunction) {
       fetchFunctionMetrics(selectedFunction);
     }
   }, [selectedFunction]);
 
   const handleFunctionChange = (event) => {
-    setSelectedFunction(event.target.value);
+    const selectedValue = event.target.value;
+    setSelectedFunction(selectedValue);
   };
 
   return (
     <div>
       <h1 className='text-2xl font-bold text-gray-800 mb-6'>Function Detail</h1>
 
+      {/* Function Selector */}
       <div className='mt-4 pb-2'>
         <select
           id='function-select'
@@ -110,6 +119,8 @@ const FunctionPage = () => {
           ))}
         </select>
       </div>
+
+      {/* Metric Cards */}
       <div className='flex flex-wrap gap-6 mt-8'>
         <MetricCard
           title={
@@ -119,9 +130,7 @@ const FunctionPage = () => {
             </div>
           }
           metric={metrics.Invocations}
-        >
-          {' '}
-        </MetricCard>
+        />
         <MetricCard
           title={
             <div className='flex items-center space-x-2'>
@@ -130,9 +139,7 @@ const FunctionPage = () => {
             </div>
           }
           metric={`${metrics.Errors} %`}
-        >
-          {' '}
-        </MetricCard>
+        />
         <MetricCard
           title={
             <div className='flex items-center space-x-2'>
@@ -140,10 +147,8 @@ const FunctionPage = () => {
               <span>Throttles</span>
             </div>
           }
-          metric={`${metrics.Throttles}`}
-        >
-          {' '}
-        </MetricCard>
+          metric={metrics.Throttles}
+        />
         <MetricCard
           title={
             <div className='flex items-center space-x-2'>
@@ -152,14 +157,14 @@ const FunctionPage = () => {
             </div>
           }
           metric={metrics.ColdStartDuration}
-        >
-          {' '}
-        </MetricCard>
+        />
       </div>
+
+      {/* Charts Section */}
       <div className='flex gap-6 mt-8'>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
           <Chart
-            key={metrics.Invocations} // Force re-render
+            key={metrics.Invocations}
             title='Invocations'
             data={[{ time: new Date(), value: metrics.Invocations }]}
             color={'blue'}
@@ -168,7 +173,7 @@ const FunctionPage = () => {
         </div>
         <div className='flex-1 min-w-[300px] p-5 border-2 border-gray-300 rounded-lg shadow-md bg-white'>
           <Chart
-            key={metrics.ColdStartDuration} //  Force re-render
+            key={metrics.ColdStartDuration}
             title='Duration'
             data={[{ time: new Date(), value: metrics.ColdStartDuration }]}
             color={'green'}

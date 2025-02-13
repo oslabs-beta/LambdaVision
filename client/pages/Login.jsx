@@ -29,9 +29,8 @@ const Login = ({ onLogin }) => {
         
       );
       if (response.status === 200) {
-        console.log("Login successful, received token:", response.data.token); // ✅ Debug log
 
-        localStorage.setItem("token", response.data.token);  // ✅ Store token
+        localStorage.setItem("token", response.data.token);  
         onLogin(); 
         navigate('/metrics');
       }
