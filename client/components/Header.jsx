@@ -35,28 +35,28 @@ function Header() {
   };
 
   return (
-    <div className='bg-gray-800 text-white shadow-md'>
-      <nav className='flex justify-between items-center px-6 py-4'>
+    <div className='bg-white text-gray-800 shadow-xl relative z-10'>
+      <nav className='flex justify-between items-center px-4 py-2'>
         {/* Left Section */}
         <div className='flex items-center space-x-2'>
           <img src={logo} alt='Logo' className='w-20 h-20 pb-0' />
-          <span className='text-lg font-bold'>LambdaVision</span>
+          <span className='text-xl font-bold'>LambdaVision</span>
         </div>
 
         {/* Right Section */}
         <div className='relative'>
           {/* <button
-            className='bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded'
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button> */}
+           className='bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded'
+           onClick={handleSignOut}
+         >
+           Sign Out
+         </button> */}
           <button
             onClick={toggleDropdown}
             className='flex items-center space-x-2 text-lg font-semibold hover:text-blue-400'
           >
-            <UserCircleIcon className='size-8 text-white' />
-            <ChevronDownIcon className='size-4 text-white' />
+            <UserCircleIcon className='size-9  text-gray-800' />
+            <ChevronDownIcon className='size-4 text-gray' />
           </button>
 
           {/* Dropdown Menu */}
