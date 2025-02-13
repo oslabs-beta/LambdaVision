@@ -26,10 +26,10 @@ const FunctionPage = () => {
     try {
       const token = localStorage.getItem('token'); // Get the token
 
-    if (!token) {
+      if (!token) {
       console.error("🚨 No token found in local storage");
       return; // Stop execution if no token is available
-    }
+      }
 
     const response = await axios.get(
       'http://localhost:3000/api/lambda/total-functions',
@@ -48,6 +48,13 @@ const FunctionPage = () => {
   //Metric Cards & Charts
   const fetchFunctionMetrics = async (functionName) => {
     try {
+      const token = localStorage.getItem('token'); // Get the token
+
+      if (!token) {
+      console.error("🚨 No token found in local storage");
+      return; // Stop execution if no token is available
+      }
+      
       const response = await axios.get(
         `http://localhost:3000/api/lambda/functions/${functionName}/metrics`,{
           headers: {
