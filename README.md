@@ -58,6 +58,24 @@ To get started with LambdaVision, follow the instructions below to set up the pr
   npm start
 ```
 ## UserGuide
+### Create an Account
+<img src="client/assets/loginsignup.gif" alt="Login/Signup" width="400">
+
+### Settings
+Enter your AWS Credentials and Region 
+<img src="client/assets/settings-.gif" alt="Settings" width="600">
+
+### Overview
+View overall metrics for lambda functions
+<img src="client/assets/overview-.gif" alt="Overview" width="600">
+
+### Function Detail
+View metrics for specific functions
+<img src="client/assets/function-.gif" alt="Functions" width="600">
+
+### Error Alerts
+View error alerts for lambda functions
+<img src="client/assets/erroralerts-.gif" alt="Error Alerts" width="600">
 
 ## Contribution Instructions
 
