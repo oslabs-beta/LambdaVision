@@ -15,7 +15,7 @@ const SettingsPage = () => {
     setLoading(true);
 
     const token = localStorage.getItem('token');
-    console.log("Token being sent in request:", token); 
+     
 
     if (!token) {
         console.error('No token found');
@@ -39,7 +39,7 @@ const SettingsPage = () => {
       }
     );
     
-    console.log("Response:", response.data);
+    
       setSaved(true);
       setAccessKey('');
       setSecretsKey('');
